@@ -6,12 +6,14 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Interceptor pour ajouter le token à chaque requête
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('mlms_token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
+// Interceptor pour gérer les erreurs globales
 api.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -23,6 +25,18 @@ api.interceptors.response.use(
     return Promise.reject(err);
   }
 );
+
+// --------------------- Auth API ---------------------
+export const authAPI = {
+  login: (data) => api.post('/api/auth/login', data),
+  logout: () => {
+    localStorage.removeItem('mlms_token');
+    localStorage.removeItem('mlms_user');
+  },
+  me: () => api.get('/api/auth/me'),
+};
+
+// --------------------- Users API ---------------------
 export const usersAPI = {
   getAll: () => api.get('/api/users'),
   getById: (id) => api.get(`/api/users/${id}`),
@@ -32,6 +46,7 @@ export const usersAPI = {
   updateStatus: (id, status) => api.patch(`/api/users/${id}/status`, { status }),
 };
 
+// --------------------- Clients API ---------------------
 export const clientsAPI = {
   getAll: (search) => api.get('/api/clients', { params: search ? { search } : {} }),
   getById: (id) => api.get(`/api/clients/${id}`),
@@ -40,6 +55,7 @@ export const clientsAPI = {
   remove: (id) => api.delete(`/api/clients/${id}`),
 };
 
+// --------------------- Loans API ---------------------
 export const loansAPI = {
   getAll: () => api.get('/api/loans'),
   getById: (id) => api.get(`/api/loans/${id}`),
@@ -51,12 +67,14 @@ export const loansAPI = {
   updateStatus: (id, status) => api.patch(`/api/loans/${id}/status`, { status }),
 };
 
+// --------------------- Repayments API ---------------------
 export const repaymentsAPI = {
   getByLoan: (loanId) => api.get(`/api/repayments/loan/${loanId}`),
   getPending: (loanId) => api.get(`/api/repayments/loan/${loanId}/pending`),
   record: (data) => api.post('/api/repayments', data),
 };
 
+// --------------------- Dashboard API ---------------------
 export const dashboardAPI = {
   getStats: () => api.get('/api/dashboard/stats'),
   getOverdue: () => api.get('/api/dashboard/overdue'),
