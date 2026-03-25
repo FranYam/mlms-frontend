@@ -1,7 +1,7 @@
 // src/pages/admin/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import { dashboardAPI } from '../../services/api';
-import { Users, CreditCard, DollarSign, AlertTriangle, Clock } from 'lucide-react';
+import { Users, CreditCard, DollarSign, AlertTriangle, Clock, TrendingUp } from 'lucide-react';
 
 const fmtMoney = (n) => new Intl.NumberFormat('en-US').format(n || 0) + ' FCFA';
 const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';

@@ -20,7 +20,9 @@ api.interceptors.response.use(
     if (err.response?.status === 401) {
       localStorage.removeItem('mlms_token');
       localStorage.removeItem('mlms_user');
-      window.location.href = '/login';
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(err);
   }
