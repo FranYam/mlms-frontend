@@ -45,6 +45,9 @@ export default function Users() {
     try {
       const data = { ...form };
       if (selected && !data.password) delete data.password;
+      // Sanitisation : conversion de l'identifiant client vide en null
+      if (data.clientId === '') data.clientId = null;
+      
       if (selected) await usersAPI.update(selected._id, data);
       else await usersAPI.create(data);
       setModal(null); load();
