@@ -1,7 +1,7 @@
 // src/pages/admin/Users.js
 import React, { useState, useEffect } from 'react';
 import { usersAPI, clientsAPI } from '../../services/api';
-import { Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Users as UsersIcon, Eye, Mail, Shield, Smartphone } from 'lucide-react';
+import { Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Users as UsersIcon, Eye, EyeOff, Mail, Shield, Smartphone } from 'lucide-react';
 
 const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US') : '—';
 const roleBadge = (r) => {
@@ -17,6 +17,7 @@ export default function Users() {
   const [modal, setModal] = useState(null); // null | 'form' | 'view'
   const [selected, setSelected] = useState(null);
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'LOAN_OFFICER', clientId: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -138,7 +139,13 @@ export default function Users() {
 
                 <div className="form-group">
                   <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--gray-400)' }}>{selected ? 'Reset Access Token (Optional)' : 'Security Credential *'}</label>
-                  <input className="form-control" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required={!selected} placeholder="••••••••" />
+                  <div style={{ position: 'relative' }}>
+                    <input className="form-control" type={showPassword ? 'text' : 'password'} value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required={!selected} placeholder="••••••••" style={{ paddingRight: 40 }} />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)}
+                      style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--gray-400)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="form-group">

@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Building2 } from 'lucide-react';
+import { Building2, Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
   const { login, loading } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -91,11 +92,17 @@ export default function Login() {
                 value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required 
                 style={{ height: 48, fontSize: 15 }} />
             </div>
-            <div className="form-group" style={{ marginBottom: 32 }}>
+            <div className="form-group" style={{ marginBottom: 32, position: 'relative' }}>
               <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--gray-400)', marginBottom: 8 }}>Secure Password</label>
-              <input className="form-control" type="password" placeholder="••••••••"
-                value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required 
-                style={{ height: 48, fontSize: 15 }} />
+              <div style={{ position: 'relative' }}>
+                <input className="form-control" type={showPassword ? 'text' : 'password'} placeholder="••••••••"
+                  value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required 
+                  style={{ height: 48, fontSize: 15, paddingRight: 48 }} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--gray-400)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 4 }}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
             <button type="submit" className="btn btn-primary" disabled={loading}
               style={{ width: '100%', justifyContent: 'center', height: 50, fontSize: 15, fontWeight: 700, borderRadius: 10, boxShadow: '0 10px 15px -3px rgba(108, 76, 241, 0.2)' }}>
@@ -103,24 +110,6 @@ export default function Login() {
             </button>
           </form>
 
-          <div style={{ marginTop: 48, padding: '24px', background: 'var(--gray-50)', borderRadius: 16, border: '1px solid var(--gray-100)' }}>
-            <p style={{ fontSize: 10, fontWeight: 800, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 16 }}>Authorized Demo Access</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {[
-                { role: 'Administrator', email: 'admin@mlms.com' },
-                { role: 'Loan Officer', email: 'officer@mlms.com' },
-                { role: 'Client Portal', email: 'ali.client@mlms.com' },
-              ].map(({ role, email }) => (
-                <div key={email} onClick={() => setForm({ email, password: 'secret123' })}
-                  className="test-account"
-                  style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 12px', cursor: 'pointer', borderRadius: 8, background: '#fff', border: '1px solid var(--gray-200)', transition: 'all 0.2s ease' }}>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)' }}>{role}</span>
-                  <span style={{ fontSize: 12, color: 'var(--gray-500)', fontWeight: 500 }}>{email}</span>
-                </div>
-              ))}
-            </div>
-            <p style={{ fontSize: 11, color: 'var(--gray-400)', marginTop: 16, textAlign: 'center', fontWeight: 500 }}>Global Password: <code style={{ color: 'var(--primary)', fontWeight: 700 }}>secret123</code></p>
-          </div>
         </div>
       </div>
     </div>
